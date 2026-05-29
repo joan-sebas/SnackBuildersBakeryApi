@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: bakery-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-bakery}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bakery_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-bakery}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - bakery_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bakery} -d ${POSTGRES_DB:-bakery}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bakery-migrations
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-bakery}:${POSTGRES_PASSWORD:-bakery_dev}@db:5432/${POSTGRES_DB:-bakery}
+    command: ["alembic", "upgrade", "head"]
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bakery-api
+    depends_on:
+      db:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-bakery}:${POSTGRES_PASSWORD:-bakery_dev}@db:5432/${POSTGRES_DB:-bakery}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      AGING_THRESHOLD_MINUTES: ${AGING_THRESHOLD_MINUTES:-15}
+      AGING_FACTOR: ${AGING_FACTOR:-1.0}
+      PAYMENT_MOCK_FAILURE_RATE: ${PAYMENT_MOCK_FAILURE_RATE:-0.0}
+      PAYMENT_MOCK_LATENCY_MS: ${PAYMENT_MOCK_LATENCY_MS:-200}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    restart: unless-stopped
+
+volumes:
+  bakery_db_data:

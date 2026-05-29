@@ -1,0 +1,63 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Unit test / coverage reports
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+coverage.xml
+
+# Caches
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.env
+.env.*
+!.env.example
+.venv
+venv/
+env/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# AI development tools (excluded from public repo)
+.claude/skills/
+.cursor/
+.aider*
+.copilot/
+
+# Internal working documents (excluded from public repo)
+INTERNAL/
+*.local.md
+notes.md
+plan.md
+scratch.md
+master-plan-v*.md
+execution-plan-*.md
+CLAUDE_INTERNAL.md
+initial-prompt*.md
+decisions-raw.md

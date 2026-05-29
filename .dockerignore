@@ -1,0 +1,64 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv
+env
+
+# Build artifacts
+build
+dist
+*.egg-info
+
+# Caches
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+coverage.xml
+
+# IDE
+.idea
+.vscode
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Tests
+tests
+.pre-commit-config.yaml
+
+# Documentation
+docs
+*.md
+!README.md
+
+# AI tooling
+.claude
+.cursor
+.aider*
+.copilot
+
+# Internal docs
+INTERNAL
+CLAUDE_INTERNAL.md
+master-plan*.md
+execution-plan*.md
+notes.md
+plan.md
